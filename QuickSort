@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void triRapide(int *tableau, int taille) {
+    int i, j, pivot, temp;
+
+    // Si la taille du tableau est inférieure à 2, aucun tri n'est nécessaire
+    if (taille < 2) return;
+
+    // Choisir le dernier élément comme pivot
+    pivot = tableau[taille - 1];
+    i = j = 0;
+    while (j < taille) {
+        // Si l'élément actuel est inférieur ou égal au pivot
+        if (tableau[j] <= pivot) {
+            // Échanger l'élément actuel avec celui à la position i (si différent)
+            if (i != j) {
+                temp = tableau[j];
+                tableau[j] = tableau[i];
+                tableau[i] = temp;
+            }
+            // Avancer i pour inclure l'élément dans la zone inférieure ou égale au pivot
+            i++;
+        }
+        j++;
+    }
+
+    afficher(taille, tableau);
+
+    // Appeler récursivement le tri rapide sur la partie gauche (avant le pivot)
+    triRapide(tableau, i - 1);
+
+    // Appeler récursivement le tri rapide sur la partie droite (après le pivot)
+    triRapide(tableau + i - 1, taille - i + 1);
+}
+
+int main() {
+    int tableau[] = {29, 10, 14, 37, 13};
+    int taille = sizeof(tableau) / sizeof(tableau[0]);
+
+    printf("Tableau initial : ");
+    afficher(taille, tableau);
+
+    // Lancer le tri rapide
+    triRapide(tableau, taille);
+
+    printf("Tableau trié : ");
+    afficher(taille, tableau);
+
+    return 0;
+}
+
+
