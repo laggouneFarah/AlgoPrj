@@ -14,27 +14,44 @@ void afficherMatrice(int lignes, int colonnes, char matrice[lignes][colonnes][50
     }
 }
 
+// Fonction pour échanger deux chaînes de caractères
+void echanger_chaines(char* str1, char* str2) {
+    char temp[50];
+    int i = 0;
+    while (str1[i] != '\0' || str2[i] != '\0') {
+        temp[i] = str1[i];
+        str1[i] = str2[i];
+        str2[i] = temp[i];
+        i++;
+    }
+    temp[i] = '\0'; // Termine la chaîne
+    str1[i] = '\0';
+    str2[i] = '\0';
+}
+
 // Fonction de partition pour le tri rapide
 int partition(char matrice[ROWS][COLS][50], int row, int low, int high) {
     char pivot[50];
-    strcpy(pivot, matrice[row][high]);
-    int i = (low - 1);
-    
-    for (int j = low; j < high; j++) {
-        if (strcmp(matrice[row][j], pivot) < 0) {
-            i++;
-            char temp[50];
-            strcpy(temp, matrice[row][i]);
-            strcpy(matrice[row][i], matrice[row][j]);
-            strcpy(matrice[row][j], temp);
+    int i = 0;
+
+    // Copie manuelle du pivot
+    while (matrice[row][high][i] != '\0') {
+        pivot[i] = matrice[row][high][i];
+        i++;
+    }
+    pivot[i] = '\0';
+
+    int left = low - 1;
+
+    for (int right = low; right < high; right++) {
+        if (strcmp(matrice[row][right], pivot) < 0) {
+            left++;
+            echanger_chaines(matrice[row][left], matrice[row][right]);
         }
     }
-    char temp[50];
-    strcpy(temp, matrice[row][i + 1]);
-    strcpy(matrice[row][i + 1], matrice[row][high]);
-    strcpy(matrice[row][high], temp);
-    
-    return i + 1;
+    echanger_chaines(matrice[row][left + 1], matrice[row][high]);
+
+    return left + 1;
 }
 
 // Fonction pour appliquer le tri rapide sur une ligne de la matrice
@@ -46,6 +63,7 @@ void quick_sort_matrix_row(char matrice[ROWS][COLS][50], int row, int low, int h
     }
 }
 
+// Fonction pour trier la matrice entière
 void quick_sort_matrix(char matrice[ROWS][COLS][50]) {
     for (int i = 0; i < ROWS; i++) {
         quick_sort_matrix_row(matrice, i, 0, COLS - 1);
@@ -56,7 +74,6 @@ void quick_sort_matrix(char matrice[ROWS][COLS][50]) {
 }
 
 int main() {
-
     char matrice[ROWS][COLS][50] = {
         {"Farah", "Laggoune", "Ines", "Allag", "nana"},
         {"Kiwi", "Pomme", "Banane", "Ananas", "Cerise"},
