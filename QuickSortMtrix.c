@@ -3,68 +3,73 @@
 #define ROWS 3
 #define COLS 4
 
-void swap(int* a, int* b) {
+int cptcomparaisons = 0;
+int cptpermutations = 0;
+
+//swap deux éléments
+void echanger(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
+    cptpermutations++;
 }
-
-// Fonction pour partitionner le tableau pour le tri rapide
+// partitionner le tableau pour le tri rapide
 int partition(int arr[], int low, int high) {
     int pivot = arr[high]; // Choisir le pivot
-    int i = (low - 1); // Indice du plus petit élément
-
+    int i = (low - 1);
     // Parcourir le tableau et réorganiser les éléments
     for (int j = low; j < high; j++) {
+        cptcomparaisons++;
         if (arr[j] < pivot) {
             i++;
-            swap(&arr[i], &arr[j]);
+            echanger(&arr[i], &arr[j]);
         }
     }
-    swap(&arr[i + 1], &arr[high]);
+    echanger(&arr[i + 1], &arr[high]);
     return (i + 1);
 }
-
-// Fonction pour appliquer le tri rapide sur un tableau
-void quick_sort(int arr[], int low, int high) {
+void trirapide(int arr[], int low, int high) {
     if (low < high) {
         int pi = partition(arr, low, high); // Trouver l'indice du pivot
-        quick_sort(arr, low, pi - 1); // Trier avant le pivot
-        quick_sort(arr, pi + 1, high); // Trier après le pivot
+        trirapide(arr, low, pi - 1); // Trier avant le pivot
+        trirapide(arr, pi + 1, high); // Trier après le pivot
     }
 }
-
-void quick_sort_matrix_row(int mat[ROWS][COLS], int row) {
-    quick_sort(mat[row], 0, COLS - 1); // Tri rapide de la ligne
+void trirapidelignematrice(int mat[ROWS][COLS], int row) {
+    trirapide(mat[row], 0, COLS - 1); 
 }
 
-// Fonction pour trier chaque ligne de la matrice
-void quick_sort_matrix(int mat[ROWS][COLS]) {
+//trier chaque ligne de la matrice
+void trirapidematrice(int mat[ROWS][COLS]) {
     for (int i = 0; i < ROWS; i++) {
-        quick_sort_matrix_row(mat, i);  
+        trirapidelignematrice(mat, i);  
         printf("État après le tri de la ligne %d :\n", i + 1); 
-        afficherMatrice(ROWS, COLS, mat);  //affichage de la matrice 
+        afficherMatrice(ROWS, COLS, mat);
     }
 }
-
-// Fonction pour afficher une matrice
-void afficherMatrice(int lignes, int colonnes, int matrice[lignes][colonnes]);
+void afficherMatrice(int lignes, int colonnes, int matrice[lignes][colonnes]) {
+    for (int i = 0; i < lignes; i++) {
+        for (int j = 0; j < colonnes; j++) {
+            printf("%d ", matrice[i][j]);
+        }
+        printf("\n");
+    }
+}
 
 int main() {
     int matrice[ROWS][COLS] = {
-        {38, 27, 43, 3},
-        {9, 82, 10, 28},
-        {7, 15, 25, 60}
+        {9, 2, 96, 3},
+        {25, 4, 10, 28},
+        {7, 22, 6, 60}
     };
-
     printf("Matrice initiale :\n");
     afficherMatrice(ROWS, COLS, matrice);
-
     printf("\nTri des lignes avec Quick Sort :\n");
-    quick_sort_matrix(matrice);
-
+    trirapidematrice(matrice);
     printf("\nMatrice triée :\n");
     afficherMatrice(ROWS, COLS, matrice);
+    printf("\nNombre total de comparaisons : %d\n", cptcomparaisons);
+    printf("Nombre total de permutations : %d\n", cptpermutations);
 
     return 0;
 }
