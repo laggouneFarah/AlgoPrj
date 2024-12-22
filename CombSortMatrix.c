@@ -1,56 +1,66 @@
 #include <stdio.h>
 
-#define ROWS 3
-#define COLS 4
+#define LIGNES 3
+#define COLONNES 4
 
-// Fonction pour échanger deux éléments
-void swap(int* a, int* b) {
+void echanger(int* a, int* b) {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-// Fonction pour appliquer le Comb Sort à une ligne
-void comb_sort(int arr[], int n) {
-    int gap = n; // Ecart initial
-    float shrink = 1.3; // Facteur de réduction
-    int sorted = 0;
+void tri_peigne(int tableau[], int taille) {
+    int ecart = taille;
+    float reduction = 1.3;
+    int trie = 0;
 
-    while (gap > 1 || !sorted) {
-        // Réduire l'écart
-        gap = (gap > 1) ? (int)(gap / shrink) : 1;
-        sorted = 1;
+    while (ecart > 1 || !trie) {
+        ecart = (ecart > 1) ? (int)(ecart / reduction) : 1;
+        trie = 1;
 
-        // Comparer et échanger les éléments séparés par l'écart
-        for (int i = 0; i + gap < n; i++) {
-            if (arr[i] > arr[i + gap]) {
-                swap(&arr[i], &arr[i + gap]);
-                sorted = 0; // Si un échange a eu lieu, ce n'est pas encore trié
+        for (int i = 0; i + ecart < taille; i++) {
+            if (tableau[i] > tableau[i + ecart]) {
+                echanger(&tableau[i], &tableau[i + ecart]);
+                trie = 0;
             }
         }
     }
 }
 
-// Fonction pour afficher l'état actuel de la matrice
-void print_matrix(int mat[ROWS][COLS]) {
-    printf("Current Matrix:\n");
-    for (int i = 0; i < ROWS; i++) {
-        for (int j = 0; j < COLS; j++) {
-            printf("%d ", mat[i][j]);
+void afficher_matrice(int matrice[LIGNES][COLONNES]) {
+    for (int i = 0; i < LIGNES; i++) {
+        for (int j = 0; j < COLONNES; j++) {
+            printf("%d ", matrice[i][j]);
         }
         printf("\n");
     }
 }
 
-// Fonction pour trier une ligne de la matrice avec Comb Sort
-void comb_sort_matrix_row(int mat[ROWS][COLS], int row) {
-    comb_sort(mat[row], COLS); // Appliquer Comb Sort sur une ligne
+void tri_peigne_ligne_matrice(int matrice[LIGNES][COLONNES], int ligne) {
+    tri_peigne(matrice[ligne], COLONNES);
 }
 
-// Fonction pour trier chaque ligne de la matrice
-void comb_sort_matrix(int mat[ROWS][COLS]) {
-    for (int i = 0; i < ROWS; i++) {
-        comb_sort_matrix_row(mat, i); // Trier chaque ligne
-        print_matrix(mat); // Afficher l'état après chaque tri de ligne
+void tri_peigne_matrice(int matrice[LIGNES][COLONNES]) {
+    for (int i = 0; i < LIGNES; i++) {
+        tri_peigne_ligne_matrice(matrice, i);
+        afficher_matrice(matrice);
     }
+}
+int main() {
+    int matrice[LIGNES][COLONNES] = {
+        {9, 2, 8, 7},
+        {5, 3, 1, 6},
+        {4, 12, 10, 11}
+    };
+
+    printf("Matrice initiale :\n");
+    afficher_matrice(matrice);
+
+    printf("\nTri de chaque ligne avec le tri peigne :\n");
+    tri_peigne_matrice(matrice);
+
+    printf("\nMatrice finale après tri :\n");
+    afficher_matrice(matrice);
+
+    return 0;
 }
