@@ -14,7 +14,6 @@ void afficherVecteur(int n, int *a) {
 void fusion(int *a, int debut, int milieu, int fin) {
     int n1 = milieu - debut + 1; 
     int n2 = fin - milieu;     
-
     int *gauche = malloc(n1 * sizeof(int));  // Tableau temporaire pour la gauche
     int *droite = malloc(n2 * sizeof(int));  // Tableau temporaire pour la droite
 
